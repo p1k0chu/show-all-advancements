@@ -1,7 +1,7 @@
 {
   "required": true,
   "package": "com.github.p1k0chu.mcmod.show_all_advancements.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_17",
   "mixins": [
     "PlayerAdvancementsMixin",
     "ServerAdvancementManagerMixin"
