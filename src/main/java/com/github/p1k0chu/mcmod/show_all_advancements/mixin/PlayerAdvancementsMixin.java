@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -33,14 +34,15 @@ public abstract class PlayerAdvancementsMixin {
 
     @Unique
     private void updateTreeRecursive(AdvancementNode node, AdvancementVisibilityEvaluator.Output output) {
-        Iterable<AdvancementNode> children = node.children();
+        Iterator<AdvancementNode> children = node.children().iterator();
+        boolean childrenExist = children.hasNext();
 
-        for (AdvancementNode child : children) {
-            updateTreeRecursive(child, output);
+        while (children.hasNext()) {
+            updateTreeRecursive(children.next(), output);
         }
 
         Optional<DisplayInfo> displayInfo = node.advancement().display();
-        output.accept(node, displayInfo.isEmpty() || (!displayInfo.get().isHidden() || getOrStartProgress(node.holder()).isDone()));
+        output.accept(node, childrenExist || displayInfo.isPresent() && (!displayInfo.get().isHidden() || getOrStartProgress(node.holder()).isDone()));
     }
 
     @Inject(method = "load", at = @At("RETURN"))
