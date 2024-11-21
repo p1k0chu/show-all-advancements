@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Iterator;
 import java.util.function.Predicate;
 
 
@@ -34,14 +35,15 @@ public abstract class PlayerAdvancementsMixin {
 
     @Unique
     private void updateTreeRecursive(Advancement advancement, AdvancementVisibilityEvaluator.Output output) {
-        Iterable<Advancement> children = advancement.getChildren();
+        Iterator<Advancement> children = advancement.getChildren().iterator();
+        boolean childrenExist = children.hasNext();
 
-        for (Advancement child : children) {
-            updateTreeRecursive(child, output);
+        while (children.hasNext()) {
+            updateTreeRecursive(children.next(), output);
         }
 
         DisplayInfo displayInfo = advancement.getDisplay();
-        output.accept(advancement, displayInfo == null || (!displayInfo.isHidden() || getOrStartProgress(advancement).isDone()));
+        output.accept(advancement, childrenExist || displayInfo != null && (!displayInfo.isHidden() || getOrStartProgress(advancement).isDone()));
     }
 
     @Inject(method = "load", at = @At("RETURN"))
