@@ -34,16 +34,18 @@ public abstract class PlayerAdvancementsMixin {
     }
 
     @Unique
-    private void updateTreeRecursive(Advancement advancement, AdvancementVisibilityEvaluator.Output output) {
+    private boolean updateTreeRecursive(Advancement advancement, AdvancementVisibilityEvaluator.Output output) {
         Iterator<Advancement> children = advancement.getChildren().iterator();
-        boolean childrenExist = children.hasNext();
+        DisplayInfo displayInfo = advancement.getDisplay();
 
+        boolean bl = displayInfo != null && (!displayInfo.isHidden() || getOrStartProgress(advancement).isDone());
         while (children.hasNext()) {
-            updateTreeRecursive(children.next(), output);
+            bl = updateTreeRecursive(children.next(), output) || bl;
         }
 
-        DisplayInfo displayInfo = advancement.getDisplay();
-        output.accept(advancement, childrenExist || displayInfo != null && (!displayInfo.isHidden() || getOrStartProgress(advancement).isDone()));
+        output.accept(advancement, bl);
+
+        return bl;
     }
 
     @Inject(method = "load", at = @At("RETURN"))
