@@ -16,12 +16,22 @@
 	"icon": "assets/show-all-advancements/icon.png",
 	"environment": "*",
 	"mixins": [
-		"show-all-advancements.mixins.json"
+		"show-all-advancements.mixins.json",
+		{
+			"config": "show-all-advancements.client.mixins.json",
+			"environment": "client"
+		}
 	],
+	"entrypoints": {
+		"main": [
+			"com.github.p1k0chu.mcmod.show_all_advancements.ShowAllAdvsEntry"
+		]
+	},
 	"depends": {
 		"fabricloader": ">=0.16.9",
 		"minecraft": ">=26.1",
-		"java": ">=21"
+		"java": ">=21",
+		"fabric-api": "*"
 	},
 	"suggests": {
 	}
