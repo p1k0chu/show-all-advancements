@@ -19,5 +19,8 @@ directory. Example:
 }
 ```
 
+The command `/show-all-advancements reloadconfig` will reload the
+config.
+
 Screenshot with BACAP and AdvancementInfo Reloaded:
 [![2024-11-21-18-29-54.png](https://i.postimg.cc/J4myKHfR/2024-11-21-18-29-54.png)](https://postimg.cc/BtYQnbZz)
