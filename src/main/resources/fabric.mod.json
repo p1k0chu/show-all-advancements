@@ -16,11 +16,7 @@
 	"icon": "assets/show-all-advancements/icon.png",
 	"environment": "*",
 	"mixins": [
-		"show-all-advancements.mixins.json",
-		{
-			"config": "show-all-advancements.client.mixins.json",
-			"environment": "client"
-		}
+		"show-all-advancements.mixins.json"
 	],
 	"entrypoints": {
 		"main": [

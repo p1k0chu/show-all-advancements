@@ -8,16 +8,17 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Set;
 
+import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.p1k0chu.mcmod.show_all_advancements.ducks.PlayerAdvancementsDuck;
 import com.github.p1k0chu.mcmod.show_all_advancements.mixin.PlayerAdvancementsAccessor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.advancements.AdvancementNode;
 import net.minecraft.commands.Commands;
@@ -26,6 +27,8 @@ import net.minecraft.server.permissions.Permissions;
 
 public class ShowAllAdvsEntry implements ModInitializer {
     public static String MOD_ID = "show-all-advancements";
+
+    public static ThreadLocal<Identifier> SERIALIZED_ADV_ID = ThreadLocal.withInitial(() -> null);
 
     public static Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     private static final Gson GSON = new GsonBuilder()
@@ -61,6 +64,9 @@ public class ShowAllAdvsEntry implements ModInitializer {
                                     var server = ctx.getSource().getServer();
 
                                     for (var player : server.getPlayerList().getPlayers()) {
+                                        ((PlayerAdvancementsDuck) player.getAdvancements())
+                                                .show_all_advancements$clearVisible();
+
                                         Iterable<AdvancementNode> roots = ((IServerAdvancementManager) server
                                                 .getAdvancements()).show_all_advancements$getRoots();
                                         roots.forEach(node -> ((PlayerAdvancementsAccessor) player.getAdvancements())
