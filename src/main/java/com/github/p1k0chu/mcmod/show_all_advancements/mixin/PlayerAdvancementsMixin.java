@@ -47,7 +47,7 @@ public abstract class PlayerAdvancementsMixin implements PlayerAdvancementsDuck 
             Optional<DisplayInfo> displayInfo = node.advancement().display();
             if (displayInfo.isEmpty()) return false;
 
-            boolean nonHidden = !displayInfo.get().isHidden();
+            boolean nonHidden = !displayInfo.get().hidden();
             return nonHidden || predicate.test(node) || ShowAllAdvsEntry.getInstance().showsThisHidden(node.holder().id().toString());
         };
         original.call(advancementNode, pred, output);
